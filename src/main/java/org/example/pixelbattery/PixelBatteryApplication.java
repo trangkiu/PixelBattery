@@ -14,7 +14,7 @@ public class PixelBatteryApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(PixelBatteryApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 400, 80);
-        stage.setTitle("Hello!");
+        stage.setTitle("Health bar!");
         stage.setScene(scene);
         stage.show();
     }
