@@ -1,0 +1,40 @@
+/* Custom title bar styling */
+.custom-title-bar {
+    -fx-background-color: rgba(192, 192, 192, 0.5);
+    -fx-padding: 3px 10px;
+    -fx-border-color: rgba(200, 200, 200, 0.3);
+    -fx-border-width: 0 0 1 0;
+}
+
+.custom-title-label {
+    -fx-font-family: "Consolas", "Monaco", monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 2px 6px;
+}
+
+.close-button {
+    -fx-background-color: rgba(255, 100, 100, 0.7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-pref-width: 16;
+    -fx-pref-height: 16;
+    -fx-background-radius: 8;
+    -fx-font-size: 10px;
+}
+
+.close-button:hover {
+    -fx-background-color: rgba(255, 50, 50, 0.9);
+}
+
+.main-content{
+    -fx-padding: 5px 2px 0px 2px ;
+    -fx-background-color: rgb(47 , 98, 162);
+}
+
+.root {
+    -fx-padding: 0;
+    -fx-spacing: 0;
+}
+

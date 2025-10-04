@@ -7,6 +7,7 @@ module org.example.pixelbattery {
     requires org.kordamp.bootstrapfx.core;
     requires java.desktop;
     requires com.sun.jna;
+    requires com.github.oshi;
 
     exports org.example.pixelbattery.Service;
     opens org.example.pixelbattery to javafx.fxml;

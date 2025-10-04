@@ -13,7 +13,7 @@ import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.example.pixelbattery.Service.Kernel32;
+import org.example.pixelbattery.Service.BatteryService;
 import org.example.pixelbattery.model.HEART_STATE;
 import org.example.pixelbattery.model.HeartPattern;
 
@@ -29,35 +29,39 @@ public class MainController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // check system
         updateBatteryDisplay();
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(10), e -> updateBatteryDisplay()));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(30), e -> updateBatteryDisplay()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
     private void updateBatteryDisplay() {
         pixelArtContainer.getChildren().clear();
-        Kernel32.SYSTEM_POWER_STATUS batteryStatus = new Kernel32.SYSTEM_POWER_STATUS();
-        Kernel32.INSTANCE.GetSystemPowerStatus(batteryStatus);
-        pixelArtContainer.getChildren().add(createGridPanePixelArt(batteryStatus.BatteryLifePercent));
 
-        //pixelArtContainer.getChildren().add(createGridPanePixelArt((byte)65));
+        BatteryService batteryService = BatteryService.getInstance();
+        batteryService.updateBatteryInfo();
+        System.out.println(batteryService.toString());
+        pixelArtContainer.getChildren().add(createGridPanePixelArt(batteryService.getBatteryLifePercent()));
+
+     //   pixelArtContainer.getChildren().add(createGridPanePixelArt((byte) 60));
+
 
     }
 
 
-    private HBox createGridPanePixelArt(byte batteryLife) {
+    private HBox createGridPanePixelArt(double batteryLife) {
         System.out.println("batteryLife : " + batteryLife);
         final int MAX_HEART = 5;
         // Create 5 heart, with 5 GridPane
         ArrayList<GridPane> batteryBar = new ArrayList<>();
-        int numOfFullHeart = batteryLife / 20;
+        int numOfFullHeart = (int)batteryLife / 20;
         // Each heart will present 20% of the battery
         for(int i = 0; i < numOfFullHeart; i++) {
             batteryBar.add(createHeartGrid(HEART_STATE.FULL));
         }
 
-        int remainder = batteryLife % 20;
+        int remainder = (int)batteryLife % 20;
         if(remainder != 0 ){
             if(remainder == 10) {
                 batteryBar.add(createHeartGrid(HEART_STATE.HALF_FULL));
@@ -109,17 +113,17 @@ public class MainController implements Initializable{
         for(int i = 0; i < (MAX_HEART - numOfFullHeart ); i++) {
             batteryBar.add(createHeartGrid(HEART_STATE.EMPTY));
         }
-        HBox container = new HBox(10);
+        HBox container = new HBox(0);
         container.getChildren().addAll(batteryBar);
         return container;
     }
 
     private GridPane createHeartGrid(HEART_STATE state){
         GridPane grid = new GridPane();
-        grid.setHgap(2);
-        grid.setVgap(2);
-        grid.setStyle("-fx-background-color: white;");
-        grid.setPadding(new Insets(10));
+        grid.setHgap(1);
+        grid.setVgap(1);
+        grid.setStyle("-fx-background-color: rgba(47 , 98, 162, 0.9);");
+        grid.setPadding(new Insets(5));
         switch (state){
             case FULL :
                 drawHeart(grid, HeartPattern.HEART_FULL);
@@ -147,13 +151,16 @@ public class MainController implements Initializable{
                 Rectangle pixel = new Rectangle(pixelSize, pixelSize);
                 switch (heartPattern[row][col]) {
                     case 0:
-                        pixel.setFill(Color.TRANSPARENT);
+                        pixel.setFill(HeartPattern.COLOR_BLUE);
                         break;
                     case 1:
                         pixel.setFill(HeartPattern.COLOR_BROWN);
                         break;
                     case 2:
                         pixel.setFill(HeartPattern.COLOR_RED);
+                        break;
+                    case 3:
+                        pixel.setFill(HeartPattern.COLOR_WHITE);
                         break;
                 }
                 grid.add(pixel, col, row);
@@ -162,7 +169,7 @@ public class MainController implements Initializable{
     }
 
     private void updateBlinkingGrid(GridPane pane, HEART_STATE state, boolean isVisible) {
-        Color color = isVisible ? HeartPattern.COLOR_RED : Color.WHITE;
+        Color color = isVisible ? HeartPattern.COLOR_RED : HeartPattern.COLOR_WHITE;
         int[][] heartPattern = HeartPattern.HEART_FULL;
 
         for (int row = 0; row < pane.getRowCount(); row++) {
