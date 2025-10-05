@@ -60,7 +60,7 @@ public class PixelBatteryApplication extends Application {
         // Main container
         VBox root = new VBox(titleBar, mainContent);
         root.setSpacing(0);
-        Scene scene = new Scene(root, 320, 84);
+        Scene scene = new Scene(root, 320, 90);
 
         // Load CSS styling
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());

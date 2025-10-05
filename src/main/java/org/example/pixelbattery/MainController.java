@@ -87,7 +87,7 @@ public class MainController implements Initializable{
                 timer.start();
 
                 numOfFullHeart++;
-            } else if(10 < remainder && remainder < 19){
+            } else if(10 < remainder && remainder <= 19){
                 // Blink between half full and full
                 GridPane blinkGrid = createHeartGrid(HEART_STATE.BLINK_RIGHT_HALF_FULL);
                 batteryBar.add(blinkGrid);

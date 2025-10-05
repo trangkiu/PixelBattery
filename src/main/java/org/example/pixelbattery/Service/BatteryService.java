@@ -4,6 +4,8 @@ import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.PowerSource;
 
+import java.util.List;
+
 public class BatteryService {
     private  String batteryName = "";
     private  double batteryLifePercent = 0;
@@ -61,14 +63,17 @@ public class BatteryService {
         SystemInfo si = new SystemInfo();
         HardwareAbstractionLayer hal = si.getHardware();
 
-        PowerSource[] powerSources = hal.getPowerSources().toArray(new PowerSource[0]);
+        List<PowerSource> powerSources = hal.getPowerSources();
 
         for (PowerSource ps : powerSources) {
-            this.batteryLifePercent = ps.getRemainingCapacityPercent() * 100;
             this.batteryName = ps.getName();
             this.isCharging = ps.isCharging();
             this.timeRemain = ps.getTimeRemainingInstant();
             this.isPowerOnLine = ps.isPowerOnLine();
+
+            if (ps.getMaxCapacity() > 0) {
+                this.batteryLifePercent  = Math.round((double) ps.getCurrentCapacity() / ps.getMaxCapacity() * 100);
+            }
         }
     }
 
